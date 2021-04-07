@@ -1,8 +1,10 @@
-FROM debian:jessie
+FROM ubuntu:focal
 
 LABEL maintainer="Linagora Folks <lgs-openpaas-dev@linagora.com>"
 LABEL description="Provides an image with Janus Gateway"
 
+ENV DEBIAN_FRONTEND "noninteractive"
+RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
 RUN apt-get update -y \
     && apt-get upgrade -y
 
@@ -15,11 +17,13 @@ RUN apt-get install -y \
     libsofia-sip-ua-dev \
     libglib2.0-dev \
     libopus-dev \
+    libconfig-dev \
     libogg-dev \
     libini-config-dev \
     libcollection-dev \
     pkg-config \
     gengetopt \
+    libcurl4-openssl-dev \
     libtool \
     autotools-dev \
     automake
@@ -35,7 +39,6 @@ RUN apt-get install -y \
 RUN cd ~ \
     && git clone https://github.com/cisco/libsrtp.git \
     && cd libsrtp \
-    && git checkout v2.0.0 \
     && ./configure --prefix=/usr --enable-openssl \
     && make shared_library \
     && sudo make install
@@ -67,7 +70,7 @@ RUN cd ~ \
     && make install \
     && make configs
 
-RUN cp -rp ~/janus-gateway/certs /opt/janus/share/janus
+#RUN cp -rp ~/janus-gateway/certs /opt/janus/share/janus
 
 COPY conf/*.cfg /opt/janus/etc/janus/
 
