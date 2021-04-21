@@ -57,7 +57,7 @@ RUN cd ~ \
     && git checkout v2.1.0 \
     && mkdir build \
     && cd build \
-    && cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .. \
+    && cmake -DLWS_WITH_OLD_API_WRAPPERS=1 -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_C_FLAGS="-fpic" .. \
     && make \
     && sudo make install
 
